@@ -7,27 +7,36 @@ import java.awt.*;
 
 public class Menu extends JFrame implements MouseListener{
 
-    JPanel panel;
-    JPanel panel2;
-    boolean change = false;
+    private JPanel panel;
     public Menu() {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setTitle("Menu Example");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setLocationRelativeTo(null);
 
-        panel = new JPanel();
+        panel = new JPanel(new GridBagLayout());
         panel.setBackground(Color.BLACK);
-        panel.setLayout(new GridLayout(20, 20, 10, 10));
-        add(panel);
+        this.add(panel);
 
+        JLabel title = new JLabel();
+        labelCreator(title, "Weather App", 500, 100, 
+        Color.WHITE, new Font("Monospaced", Font.BOLD, 48),false,0);
 
-        for (int i = 1; i <= 400; i++) {
-            JLabel label = new JLabel(String.valueOf(i), SwingConstants.CENTER);
-            label.setFont(new Font("Arial", Font.BOLD, 48));
-            label.setForeground(Color.WHITE);
-            numberCreator(label);
-        }
+        JLabel todayLabel = new JLabel();
+        labelCreator(todayLabel, "Today's Weather", 300, 75,
+        Color.WHITE, new Font("Monospaced", Font.PLAIN, 24),true,1);
+
+        JLabel tommorrowLabel = new JLabel();
+        labelCreator(tommorrowLabel, "Tommorrow's Weather", 300, 75,
+        Color.WHITE, new Font("Monospaced", Font.PLAIN, 24),true,2);
+
+        JLabel PickDateLabel = new JLabel();
+        labelCreator(PickDateLabel, "Pick a Date", 300, 75,
+        Color.WHITE, new Font("Monospaced", Font.PLAIN, 24),true,3);
+
+        JLabel exitLabel = new JLabel();
+        labelCreator(exitLabel, "Exit", 300, 75,
+        Color.WHITE, new Font("Monospaced", Font.PLAIN, 24),true,4);
+        
         
     }
 
@@ -36,10 +45,29 @@ public class Menu extends JFrame implements MouseListener{
 		// Invoked when the mouse button has been clicked (pressed and released) on a component
         if (e.getComponent() instanceof JLabel) {
         JLabel label = (JLabel) e.getComponent();
-        String text = label.getText();
-        System.out.println("Label says: " + text);
+        switch(label.getText()) {
+            case "Today's Weather":
+                // Open Today's Weather Window
+                System.out.println("Opening Today's Weather Window...");
+                break;
+            case "Tommorrow's Weather":
+                // Open Tommorrow's Weather Window
+                System.out.println("Opening Tommorrow's Weather Window...");
+                break;
+            case "Pick a Date":
+                // Open Pick a Date Window
+                System.out.println("Opening Pick a Date Window...");
+                break;
+            case "Exit":
+                // Exit Application
+                System.out.println("Exiting Application...");
+                System.exit(0);
+                break;
+            default:
+                break;
         }
 	}
+}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
@@ -55,35 +83,42 @@ public class Menu extends JFrame implements MouseListener{
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// Invoked when the mouse enters a component
-        change = !change;
-        if (change){
-            e.getComponent().setForeground(Color.GREEN);
+		// Invoked when the mouse enters a component 
+        if (e.getComponent() instanceof JLabel) {
+        JLabel label = (JLabel) e.getComponent();
+        label.setOpaque(true);
+        label.setForeground(Color.YELLOW);
         }
-        else{
-            e.getComponent().setForeground(Color.RED);
-        }        
-
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// Invoked when the mouse exits a component
-        change = !change;
-        if (change){
-            e.getComponent().setForeground(Color.GREEN);
+        if (e.getComponent() instanceof JLabel) {
+        JLabel label = (JLabel) e.getComponent();
+        label.setOpaque(false);
+        label.setForeground(Color.WHITE);
         }
-        else{
-            e.getComponent().setForeground(Color.RED);
-        }        
+
 	}
 
-    public void numberCreator(JLabel label){
-        label.addMouseListener(this);
-        panel.add(label);
-    }
-
-
+    public void labelCreator(JLabel label, String text,  int width, int height,Color textColor, Font font, boolean addMouseListener,int row) {
+        label = new JLabel(text, SwingConstants.CENTER);
+        label.setPreferredSize(new Dimension(width, height));
+        label.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+        label.setForeground(textColor);
+        label.setFont(font);
+        label.setBackground(Color.DARK_GRAY);
+        if(addMouseListener) {
+            label.addMouseListener(this);
+        }
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;   // Always in the same column to stay centered
+        gbc.gridy = row; // Increments to move down
+        gbc.insets = new Insets(10, 0, 10, 0); // Adds 10 pixels of space above and below
+        
+        panel.add(label, gbc);
+        }
 
 }
 
