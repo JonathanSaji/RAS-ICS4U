@@ -15,11 +15,11 @@ public class Weather {
     public Weather(){
         try {
             //Public API
-            //https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m
+            //https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m&timezone=America%2FNew_York
             
-
-
-            URL url = new URL("https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m");
+            int latitude = 45;
+            int longtitude = -75;
+            URL url = new URL("https://api.open-meteo.com/v1/forecast?latitude=" + latitude + "&longitude=" + longtitude + "&hourly=temperature_2m&timezone=America%2FNew_York");
         
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
@@ -56,8 +56,10 @@ public class Weather {
                 // hourly is nested so we are going to need multiple
                 JSONObject hourly = (JSONObject) dataObject.get("hourly");
                 JSONArray temperatures = (JSONArray) hourly.get("temperature_2m");
-
-                System.out.println("First temperature: " + temperatures.get(2));
+                
+                JSONArray time = (JSONArray) hourly.get("time");
+                int index = 21;
+                System.out.println("First temperature: " + temperatures.get(index) + " Time: " + time.get(index));
                 System.out.println("done printing");
                 
 
