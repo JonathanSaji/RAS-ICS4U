@@ -72,7 +72,7 @@ public class Menu extends JFrame implements MouseListener {
                     // Open Today's Weather Window
                     structuredPanel.setVisible(false);
                     panel.setVisible(false);
-                    new TodayWeather(this, new Weather(52.52, 13.41));
+                    new TodayWeather(this, new Weather(45.3042, -75.9341));
                     break;
                 case "Tommorrow's Weather":
                     // Open Tommorrow's Weather Window

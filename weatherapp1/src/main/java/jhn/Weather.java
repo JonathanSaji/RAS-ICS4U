@@ -22,8 +22,9 @@ public class Weather {
         try {
             //Public API
             //https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m&timezone=America%2FNew_York
+            //"https://api.open-meteo.com/v1/forecast?latitude=&longitude=-75&hourly=temperature_2m&models=best_match&timezone=America%2FNew_York"
             
-            URL url = new URL("https://api.open-meteo.com/v1/forecast?latitude=" + latitude + "&longitude=" + longtitude + "&hourly=temperature_2m&timezone=America%2FNew_York");
+            URL url = new URL("https://api.open-meteo.com/v1/forecast?latitude=" + latitude + "&longitude=" + longtitude + "&hourly=temperature_2m&models=best_match&timezone=America%2FNew_York");
         
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
@@ -90,6 +91,10 @@ public class Weather {
 
     public String getLongLat(){
         return "<html>Latitude: " + dataObject.get("latitude") + "<br>Longtitude: " + dataObject.get("longitude")+ "</html>";
+    }
+
+    public String getTime(int slot){
+        return ""+time.get(slot);
     }
 
 
