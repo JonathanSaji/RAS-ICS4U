@@ -13,10 +13,10 @@ import org.json.simple.parser.JSONParser;
 public class Weather {
 
     JSONArray time, temperatures;
-    int latitude, longtitude;
+    double latitude, longtitude;
     JSONObject dataObject;
     
-    public Weather(int latitude, int longtitude){
+    public Weather(double latitude, double longtitude){
         this.latitude = latitude;
         this.longtitude = longtitude;
         try {
@@ -86,6 +86,10 @@ public class Weather {
 
     public String getTemp(int time){
         return temperatures.get(time) + " °C";
+    }
+
+    public String getLongLat(){
+        return "<html>Latitude: " + dataObject.get("latitude") + "<br>Longtitude: " + dataObject.get("longitude")+ "</html>";
     }
 
 
