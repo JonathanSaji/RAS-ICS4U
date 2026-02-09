@@ -38,6 +38,10 @@ public class TodayWeather extends JFrame implements MouseListener {
                 labelCreator(new JLabel(), labelTexts[currentIndex] + " " + weather.getTemp(currentIndex), true, j, i - 1, 500, 200,currentIndex);
             }
         }
+
+        
+
+
     }
 
     public void labelCreator(JLabel label, String text, boolean addMouseListener, int gridy, int gridx, int width, int height,int index) {
@@ -50,7 +54,7 @@ public class TodayWeather extends JFrame implements MouseListener {
             label.setBorder(BorderFactory.createLineBorder(Color.YELLOW,10)); 
         }
         else{
-            label.setBorder(BorderFactory.createLineBorder(Color.white, 10)); 
+            label.setBorder(BorderFactory.createLineBorder(Color.WHITE, 5)); 
         }
         label.setForeground(Color.WHITE);
         label.setFont(new Font("Monospaced", Font.BOLD, 48));
