@@ -10,13 +10,16 @@ public class Menu extends JFrame implements MouseListener {
 
     private JPanel structuredPanel, panel;
     private JLabel settings;
+    private Weather weather;
 
-    public Menu() {
+    public Menu(Weather weather) {
 
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setTitle("Menu Example");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        //intialize weather
+        this.weather = weather;
         
 
         // has no layout has to be components have to be bound
@@ -72,7 +75,7 @@ public class Menu extends JFrame implements MouseListener {
                     // Open Today's Weather Window
                     structuredPanel.setVisible(false);
                     panel.setVisible(false);
-                    new TodayWeather(this, new Weather(45.3042, -75.9341));
+                    new TodayWeather(this, weather);
                     break;
                 case "Tommorrow's Weather":
                     // Open Tommorrow's Weather Window
@@ -156,6 +159,12 @@ public class Menu extends JFrame implements MouseListener {
         structuredPanel.add(label, gbc);
 
     }
+
+    public void setPanel(){
+        panel.setVisible(true);
+        structuredPanel.setVisible(true);
+    }
+
 
 }
 

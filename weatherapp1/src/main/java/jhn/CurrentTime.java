@@ -9,8 +9,6 @@ public class CurrentTime {
         Calendar calender =  Calendar.getInstance();
 
         currentHour = calender.get(Calendar.HOUR_OF_DAY);
-
-        System.out.println(getHour());
     }       
 
 

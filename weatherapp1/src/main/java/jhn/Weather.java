@@ -85,8 +85,27 @@ public class Weather {
         return "Temp: " + temperatures.get(slot) + " Time: " + time.get(slot) + " Latitude: " + dataObject.get("latitude") + " Longtitude: " + dataObject.get("longitude");
     }
 
-    public String getTemp(int time){
-        return temperatures.get(time) + " °C";
+    public String getTemp(int time,boolean celcius){
+        
+       // Get the temperature and cast it to a number
+    Object tempObj = temperatures.get(time);
+    double tempCelsius;
+    
+    // json-simple returns numbers as Double or Long
+    if (tempObj instanceof Double) {
+        tempCelsius = (Double) tempObj;
+    } else if (tempObj instanceof Long) {
+        tempCelsius = ((Long) tempObj).doubleValue();
+    } else {
+        tempCelsius = 0.0; // default
+    }
+    
+    if (celcius) {
+        return tempCelsius + " ℃";
+    } else {
+        double tempFahrenheit = (tempCelsius * 1.8) + 32;
+        return String.format("%.1f", tempFahrenheit) + " ℉";
+    }
     }
 
     public String getLongLat(){

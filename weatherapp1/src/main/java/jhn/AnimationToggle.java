@@ -7,13 +7,17 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.RoundRectangle2D;
 
 public class AnimationToggle extends JButton {
-    private boolean selected = false;
-    private float location = 0f; // 0 is left (off), 1 is right (on)
+    private boolean selected;
+    private float location; // 0 is left (off), 1 is right (on)
     private Timer timer;
     private Color onColor = new Color(0, 255, 0);
     private Color offColor = new Color(255, 255, 255);
 
-    public AnimationToggle() {
+    public AnimationToggle(float locat, boolean select) {
+
+        this.selected = select;
+        this.location = locat;
+
         setContentAreaFilled(false);
         setBorderPainted(false);
         setFocusPainted(false);
@@ -44,7 +48,6 @@ public class AnimationToggle extends JButton {
                 selected = !selected;
                 timer.start();
                 //debugging
-                System.out.println(selected);
             }
         });
     }
@@ -78,15 +81,5 @@ public class AnimationToggle extends JButton {
         int b = (int) (c1.getBlue() + (c2.getBlue() - c1.getBlue()) * t);
         return new Color(r, g, b);
     }
-
-    // // Main method to test the component
-    // public static void main(String[] args) {
-    //     JFrame frame = new JFrame("Swing Animated Toggle");
-    //     frame.setLayout(new FlowLayout());
-    //     frame.add(new AnimationToggle());
-    //     frame.setSize(300, 200);
-    //     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    //     frame.setLocationRelativeTo(null);
-    //     frame.setVisible(true);
-    // }
+   
 }

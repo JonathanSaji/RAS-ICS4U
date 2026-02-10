@@ -31,32 +31,31 @@ public class TodayWeather extends JFrame implements MouseListener {
             }
         }
 
-        // 3. Loop through 4 columns (i) and 6 rows (j)
+        // Loop through 4 columns (i) and 6 rows (j)
         for (int i = 1; i <= 4; i++) {
             int offset = (i - 1) * 6; // Cleaner logic for index
             for (int j = 0; j < 6; j++) {
                 int currentIndex = j + offset;
                 // Reduced height to 100 so it actually fits reasonably
-                labelCreator(new JLabel(), labelTexts[currentIndex] + " " + weather.getTemp(currentIndex), true, j, i - 1, 500, 200,currentIndex);
+                labelCreator(new JLabel(), labelTexts[currentIndex] + " " + weather.getTemp(currentIndex,WeatherApp.json.getBoolean("celcius")), true, j, i - 1, 500, 200,currentIndex,true);
             }
         }
-
-
-
+        labelCreator(new JLabel(), "Menu", true, -1, -1, 500, 200, 25,false);
 
     }
 
-    public void labelCreator(JLabel label, String text, boolean addMouseListener, int gridy, int gridx, int width, int height,int index) {
+    public void labelCreator(JLabel label, String text, boolean addMouseListener, int gridy, int gridx, int width, int height,int index,boolean useIndex) {
 
         label = new JLabel(text, SwingConstants.CENTER);
         label.setPreferredSize(new Dimension(width,height));
-        System.out.println(text);
+    if(useIndex){
         if(labelTexts[index].equals(new CurrentTime().getHour())){
             label.setBorder(BorderFactory.createLineBorder(Color.YELLOW,10)); 
         }
         else{
             label.setBorder(BorderFactory.createLineBorder(Color.WHITE, 5)); 
         }
+    }
         label.setForeground(Color.WHITE);
         label.setFont(new Font("Monospaced", Font.BOLD, 48));
         
@@ -101,10 +100,26 @@ public class TodayWeather extends JFrame implements MouseListener {
     // Unchanged Boilerplate
     @Override public void mousePressed(MouseEvent e) {}
     @Override public void mouseReleased(MouseEvent e) {}
-    @Override public void mouseClicked(MouseEvent e) {}
+    @Override public void mouseClicked(MouseEvent e) {
+        if (e.getComponent() instanceof JLabel) {
+            JLabel label = (JLabel) e.getComponent();
+            switch (label.getText()) {
+                case "Menu":
+                    todayPanel.setVisible(false);
+                    WeatherApp.getMenu().setPanel();
+                default:
+                    break;
+            }
+        }
 
-    public int getMiddleX(int sizeDiff){ return (1920 - sizeDiff) / 2; }
-    public int getMiddleY(int sizeDiff){ return (1080 - sizeDiff) / 2; }
+
+
+
+
+
+
+    }
+
 
 
 
