@@ -8,6 +8,7 @@ public class settings extends JFrame implements MouseListener {
 
     JPanel settingsPanel;
     ActionListener listener;
+    JFrame parentFrame;
     boolean celciusFarhenheit = WeatherApp.json.getBoolean("celcius");
 
     public settings(JFrame parentFrame) {
@@ -16,6 +17,7 @@ public class settings extends JFrame implements MouseListener {
         this.setTitle("Menu Example");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        this.parentFrame = parentFrame;
         settingsPanel = new JPanel(new GridBagLayout());
         settingsPanel.setBackground(Color.BLACK);
         parentFrame.add(settingsPanel);
@@ -27,7 +29,7 @@ public class settings extends JFrame implements MouseListener {
          */
 
         JButton celciusToFarenheit;
-        JLabel celciusOrFarhenheit = new JLabel();
+        JLabel celciusOrFarhenheit = new JLabel("", SwingConstants.CENTER);
         if (celciusFarhenheit) {
             celciusToFarenheit = new AnimationToggle(1f, true);
             celciusOrFarhenheit.setText("Celcius");
@@ -52,6 +54,7 @@ public class settings extends JFrame implements MouseListener {
         componentCreator(0, 0, celciusToFarenheit, false);
         componentCreator(4, 0, celciusOrFarhenheit, false);
         componentCreator(4, 1, new JLabel("Go Back", SwingConstants.CENTER), true);
+        componentCreator(4, 3, new JLabel("Configure Stats", SwingConstants.CENTER), true);
     }
 
     public void componentCreator(int gridx, int gridy, Component component, boolean mouseListener) {
@@ -93,7 +96,10 @@ public class settings extends JFrame implements MouseListener {
                 case "Go Back":
                     settingsPanel.setVisible(false);
                     WeatherApp.getMenu().setPanel();
-
+                    break;
+                case "Configure Stats":
+                    settingsPanel.setVisible(false);
+                    new ConfigureStats(parentFrame,WeatherApp.getJsonHandler());
                     break;
                 default:
 

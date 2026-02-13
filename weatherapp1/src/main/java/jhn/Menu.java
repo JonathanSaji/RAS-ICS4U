@@ -79,6 +79,7 @@ public class Menu extends JFrame implements MouseListener {
         labelCreator(exitLabel, "Exit", 300 * amp, 75 * amp,
                 Color.WHITE, new Font("Monospaced", Font.PLAIN, 24* amp), true, 4);
 
+        repaint();
     }
 
     @Override

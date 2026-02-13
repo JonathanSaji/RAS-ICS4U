@@ -142,66 +142,66 @@ public class Weather {
     */
 
     public String getHumidity(LocalDate date, int hour) {
-        return getValue(humidity, date, hour) + "%";
+        return "Humidity: " + getValue(humidity, date, hour) + "%";
     }
 
     public String getDewPoint(LocalDate date, int hour, boolean celcius) {
         String degree = WeatherApp.json.getBoolean("celcius") ? "°C" : "°F";
-        return getValue(dewPoint, date, hour) + degree;
+        return "Dew Point: " + getValue(dewPoint, date, hour) + degree;
     }
 
     public String getApparentTemp(LocalDate date, int hour, boolean celcius) {
         String degree = WeatherApp.json.getBoolean("celcius") ? "°C" : "°F";
-        return getValue(apparentTemp, date, hour) + degree;
+        return "Apparent Temperature: " + getValue(apparentTemp, date, hour) + degree;
     }
 
     public String getPrecipitation(LocalDate date, int hour) {
-        return getValue(precipitation, date, hour) + " mm";
+        return "Precipitation: " + getValue(precipitation, date, hour) + " mm";
     }
 
     public String getRain(LocalDate date, int hour) {
-        return getValue(rain, date, hour) + " mm";
+        return "Rain: " + getValue(rain, date, hour) + " mm";
     }
 
     public String getShowers(LocalDate date, int hour) {
-        return getValue(showers, date, hour) + " mm";
+        return "Showers: " + getValue(showers, date, hour) + " mm";
     }
 
     public String getSnowfall(LocalDate date, int hour) {
-        return getValue(snowfall, date, hour) + " cm";
+        return "Snowfall: " + getValue(snowfall, date, hour) + " cm";
     }
 
     public String getPressureMsl(LocalDate date, int hour) {
-        return getValue(pressureMsl, date, hour) + " hPa";
+        return "Pressure MSL: " + getValue(pressureMsl, date, hour) + " hPa";
     }
 
     public String getSurfacePressure(LocalDate date, int hour) {
-        return getValue(surfacePressure, date, hour) + " hPa";
+        return "Surface Pressure: " + getValue(surfacePressure, date, hour) + " hPa";
     }
 
     public String getCloudCover(LocalDate date, int hour) {
-        return getValue(cloudCover, date, hour) + " %";
+        return "Cloud Cover: " + getValue(cloudCover, date, hour) + " %";
     }
     public String getWindSpeed(LocalDate date, int hour) {
-        return getValue(windSpeed, date, hour) + " km/h";
+        return "Wind Speed: " + getValue(windSpeed, date, hour) + " km/h";
     }
 
     public String getSoilTemp(LocalDate date, int hour, boolean celcius) {
         String degree = WeatherApp.json.getBoolean("celcius") ? "°C" : "°F";
-        return getValue(soilTemp, date, hour) + degree;
+        return "Soil Temperature: " + getValue(soilTemp, date, hour) + degree;
     }
 
     public String geSoilMoisture(LocalDate date, int hour) {
-        return getValue(soilMoisture, date, hour) + " m³/m³";
+        return "Soil Moisture: " + getValue(soilMoisture, date, hour) + " m³/m³";
     }
     public String getIsDay(LocalDate date, int hour) {
-        return getValue(isDay, date, hour).equals("1") ? "Yes" : "No";
+        return "Is Day: " + (getValue(isDay, date, hour).equals("1") ? "Yes" : "No");
     }
     public String getWindGusts(LocalDate date, int hour) {
-        return getValue(windGusts, date, hour) + " km/h";
+        return "Wind Gusts: " + getValue(windGusts, date, hour) + " km/h";
     }
     public String getWindDirection(LocalDate date, int hour) {
-        return getValue(windDirection, date, hour) + " °";
+        return "Wind Direction: " + getValue(windDirection, date, hour) + " °";
     }
 
     public String getValue(JSONArray array, LocalDate date, int hour) {

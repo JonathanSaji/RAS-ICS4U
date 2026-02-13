@@ -1,1 +1,1 @@
-{"celcius":true}
+{"rain":true,"soilMoisture":true,"apparentTemp":true,"cloudCover":true,"celcius":false,"dewPoint":true,"precipitation":true,"showers":true,"soilTemp":true,"surfacePressure":true,"humidity":true,"windSpeed":true,"PressureMSL":true}
