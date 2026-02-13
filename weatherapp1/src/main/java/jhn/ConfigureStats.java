@@ -10,6 +10,7 @@ public class ConfigureStats extends JPanel implements MouseListener {
     JsonHandler json;
     JFrame parentFrame;
     JPanel statsPanel;
+    JLabel latLabel, longLabel;
     boolean showStats[] = new boolean[12];
 
     public ConfigureStats(JFrame parentFrame, JsonHandler json) {
@@ -49,13 +50,16 @@ public class ConfigureStats extends JPanel implements MouseListener {
             System.out.println(statNames[i] + ": " + showStats[i]);
         }
 
+        latLabel = new JLabel("Latitude: " + WeatherApp.getLat(), SwingConstants.CENTER);
+        longLabel = new JLabel(" Longitude: " + WeatherApp.getLong(), SwingConstants.CENTER);
+
         componentCreator(0, 0, new JLabel("Go Back", SwingConstants.CENTER), true, "nol");
         componentCreator(1, 0, new JLabel("- LAT", SwingConstants.CENTER), true, "nol");
         componentCreator(2, 0, new JLabel("+ LAT", SwingConstants.CENTER), true, "nol");
         componentCreator(3, 0, new JLabel("- LONG", SwingConstants.CENTER), true, "nol");
         componentCreator(4, 0, new JLabel("+ LONG", SwingConstants.CENTER), true, "nol");
-        componentCreator(5, 0, new JLabel("Lat: " + WeatherApp.getLat(), SwingConstants.CENTER), true, "nol");
-        componentCreator(6, 0, new JLabel("Long: " + WeatherApp.getLong(), SwingConstants.CENTER), true, "nol");
+        componentCreator(5, 0, latLabel, true, "nol");
+        componentCreator(6, 0, longLabel, true, "nol");
 
         // prepare listener before creating buttons so they get it
         listener = e -> {
@@ -91,7 +95,7 @@ public class ConfigureStats extends JPanel implements MouseListener {
                 label.addMouseListener(this);
             }
             if(key.equals("nol")) {
-                label.setBounds(gridx * 250, 0, 200, 100);
+                label.setBounds(gridx * 250, 0, 400, 100);
                 label.setForeground(Color.BLACK);
                 add(label);
             }
@@ -130,6 +134,22 @@ public class ConfigureStats extends JPanel implements MouseListener {
                 setVisible(false);
                 new settings(parentFrame);
                 System.out.println("Going back to settings");
+                break;
+            case "- LAT":
+                WeatherApp.setLat(WeatherApp.getLat() - 5);
+                latLabel.setText("Lat: " + WeatherApp.getLat());
+                break;
+            case "+ LAT":
+                WeatherApp.setLat(WeatherApp.getLat() + 5);
+                latLabel.setText("Lat: " + WeatherApp.getLat());
+                break;
+            case "- LONG":
+                WeatherApp.setLong(WeatherApp.getLong() - 5);
+                longLabel.setText("Long: " + WeatherApp.getLong());
+                break;
+            case "+ LONG":
+                WeatherApp.setLong(WeatherApp.getLong() + 5);
+                longLabel.setText("Long: " + WeatherApp.getLong());
                 break;
             default:
                 break;
