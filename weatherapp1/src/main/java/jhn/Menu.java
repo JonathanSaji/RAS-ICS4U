@@ -26,7 +26,12 @@ public class Menu extends JFrame implements MouseListener {
         this.setUndecorated(true);
         this.setResizable(false);
 
-        WeatherApp.getSongHandler().play();
+        if(!WeatherApp.getJsonHandler().getBoolean("music")) {
+            WeatherApp.getMusicHandler().stop();
+        }
+        else {
+            WeatherApp.getMusicHandler().play();
+        }
 
          // Get screen device
          GraphicsDevice device = GraphicsEnvironment

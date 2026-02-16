@@ -12,6 +12,8 @@ public class WeatherApp {
     public static void main(String[] args) throws Exception {
 
         song = new SongHandler("weatherapp1/src/main/java/jhn/resources/KCDII.wav");
+
+    
         json = new JsonHandler("weatherapp1\\src\\main\\java\\jhn\\settings.json");
         
         Weather weather = new Weather(getLat(), getLong());

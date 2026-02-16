@@ -12,17 +12,22 @@ public class DisplayWeather extends JFrame implements MouseListener {
     public Weather weather;
     String labelTexts[] = new String[24];
     int hourSelected;
+    public JLabel backgroundLabel;
 
-    DisplayWeather(JFrame parentFrame, Weather weather,LocalDate date) {
+    DisplayWeather(JFrame parentFrame, Weather weather, LocalDate date) {
 
-        
         this.date = date;
         this.weather = weather;
-        todayPanel = new JPanel(new GridBagLayout());
+        todayPanel = new JPanel();
         todayPanel.setBackground(Color.BLACK);
         todayPanel.setVisible(true);
         parentFrame.add(todayPanel);
-        
+
+        backgroundLabel = new JLabel(new ImageIcon(WeatherApp.getBackgroundHandler().getBackgroundPath()));
+        backgroundLabel.setBounds(0, 0, 1920, 1080);
+        backgroundLabel.setLayout(new GridBagLayout());
+        backgroundLabel.setOpaque(true);
+        todayPanel.add(backgroundLabel);
 
         for (int i = 0; i <= 23; i++) {
             if (i == 0) {
@@ -36,52 +41,52 @@ public class DisplayWeather extends JFrame implements MouseListener {
             }
         }
 
-
         // Loop through 4 columns (i) and 6 rows (j)
         for (int i = 1; i <= 4; i++) {
             int offset = (i - 1) * 6; // Cleaner logic for index
             for (int j = 0; j < 6; j++) {
                 int currentIndex = j + offset;
                 System.out.println(date);
-                labelCreator(new JLabel(), labelTexts[currentIndex] + " " + weather.getTemperature(date, currentIndex,WeatherApp.getJsonHandler().getBoolean("celcius") ), true, j, i - 1, 500, 200,currentIndex,true);
-                    
+                labelCreator(new JLabel(),
+                        labelTexts[currentIndex] + " "
+                                + weather.getTemperature(date, currentIndex,
+                                        WeatherApp.getJsonHandler().getBoolean("celcius")),
+                        true, j, i - 1, 500, 200, currentIndex, true);
 
             }
         }
-        labelCreator(new JLabel(), "Menu", true, -1, -1, 500, 200, 25,false);
+        labelCreator(new JLabel(), "Menu", true, -1, -1, 500, 200, 25, false);
 
     }
 
-    public void labelCreator(JLabel label, String text, boolean addMouseListener, int gridy, int gridx, int width, int height,int index,boolean useIndex) {
+    public void labelCreator(JLabel label, String text, boolean addMouseListener, int gridy, int gridx, int width,
+            int height, int index, boolean useIndex) {
 
         label = new JLabel(text, SwingConstants.CENTER);
-        label.setPreferredSize(new Dimension(width,height));
-    if(useIndex){
-        if(labelTexts[index].equals(new CurrentTime().getHour()) && date.equals(LocalDate.now())){
-            label.setBorder(BorderFactory.createLineBorder(Color.YELLOW,5)); 
+        label.setPreferredSize(new Dimension(width, height));
+
+        if (useIndex) {
+            if (labelTexts[index].equals(new CurrentTime().getHour()) && date.equals(LocalDate.now())) {
+                label.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
+            }
         }
-        else{
-            label.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2)); 
-        }
-    }
-        label.setForeground(Color.WHITE);
+
+        label.setForeground(Color.BLACK);
         label.setFont(new Font("Monospaced", Font.TYPE1_FONT, 60));
-        
+
         if (addMouseListener) {
             label.addMouseListener(this);
             label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         }
 
-        
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = gridx; 
-        gbc.gridy = gridy; 
-        gbc.insets = new Insets(10, 0, 0, 10); // Spacing between "cards"
+        gbc.gridx = gridx;
+        gbc.gridy = gridy;
+        gbc.insets = new Insets(20, 40, 40, 20); // Spacing between "cards"
         gbc.fill = GridBagConstraints.BOTH;
 
-        todayPanel.add(label, gbc);
+        backgroundLabel.add(label, gbc);
 
-       
     }
 
     // --- Mouse Listener Events ---
@@ -102,15 +107,22 @@ public class DisplayWeather extends JFrame implements MouseListener {
         if (e.getComponent() instanceof JLabel) {
             JLabel label = (JLabel) e.getComponent();
             label.setOpaque(false);
-            label.setForeground(Color.WHITE);
+            label.setForeground(Color.BLACK);
             label.repaint();
         }
     }
 
     // Unchanged Boilerplate
-    @Override public void mousePressed(MouseEvent e) {}
-    @Override public void mouseReleased(MouseEvent e) {}
-    @Override public void mouseClicked(MouseEvent e) {
+    @Override
+    public void mousePressed(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
         if (e.getComponent() instanceof JLabel) {
             JLabel label = (JLabel) e.getComponent();
             switch (label.getText()) {
@@ -119,32 +131,20 @@ public class DisplayWeather extends JFrame implements MouseListener {
                     WeatherApp.getMenu().setPanel();
             }
 
-            if(label.getText().contains("AM") || label.getText().contains("PM")){
+            if (label.getText().contains("AM") || label.getText().contains("PM")) {
                 String text = label.getText();
-                int hour = text.substring(0, text.indexOf(' ')).equals("12") ? 0 : Integer.parseInt(text.substring(0, text.indexOf(' ')));
-                if(text.contains("PM")){
+                int hour = text.substring(0, text.indexOf(' ')).equals("12") ? 0
+                        : Integer.parseInt(text.substring(0, text.indexOf(' ')));
+                if (text.contains("PM")) {
                     hour += 12;
                 }
                 hour = hour == 24 ? 0 : hour;
                 System.out.println(hour);
                 todayPanel.setVisible(false);
-                new DisplayStats(date, weather, WeatherApp.getMenu().getFrame(),hour);
+                new DisplayStats(date, weather, WeatherApp.getMenu().getFrame(), hour);
             }
         }
-        
-
-
-
-
-
 
     }
 
-
-
-
-
-
-
 }
-
