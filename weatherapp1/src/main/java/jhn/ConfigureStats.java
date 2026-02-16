@@ -14,6 +14,9 @@ public class ConfigureStats extends JPanel implements MouseListener {
     JLabel latLabel, longLabel;
     boolean showStats[] = new boolean[12];
 
+    double latBefore = WeatherApp.getLat();
+    double longBefore = WeatherApp.getLong();
+
     public ConfigureStats(JFrame parentFrame, JsonHandler json) {
         this.parentFrame = parentFrame;
         this.json = json;
@@ -133,10 +136,18 @@ public class ConfigureStats extends JPanel implements MouseListener {
         String text = source.getText();
         switch (text) {
             case "Go Back":
-                setVisible(false);
-                new settings(parentFrame);
-                System.out.println("Going back to settings");
-                break;
+                if (WeatherApp.getLat() != latBefore || WeatherApp.getLong() != longBefore) {
+                    Weather weather = new Weather(WeatherApp.getLat(), WeatherApp.getLong());
+                    WeatherApp.setBackgroundHandler(new BackgroundHandler(weather));
+                    Menu menu = new Menu(weather);
+                    WeatherApp.setMenu(menu);
+                    parentFrame.dispose();
+
+                } else {
+                    setVisible(false);
+                    new settings(parentFrame);
+                    System.out.println("Going back to settings");
+                }
             case "- LAT":
                 WeatherApp.setLat(WeatherApp.getLat() - 5);
                 latLabel.setText("Lat: " + (int)WeatherApp.getLat());

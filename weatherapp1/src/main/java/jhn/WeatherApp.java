@@ -83,4 +83,14 @@ public class WeatherApp {
     public static BackgroundHandler getBackgroundHandler() {
         return backgroundHandler;
     }
+
+    public static void setBackgroundHandler(BackgroundHandler backgroundHandler) {
+        WeatherApp.backgroundHandler = backgroundHandler;
+    }
+
+    public static void setMenu(Menu menu) {
+        WeatherApp.menu = menu;
+    }
+
+
 }
