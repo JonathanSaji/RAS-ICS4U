@@ -21,8 +21,8 @@ public class WeatherApp {
     
         json = new JsonHandler("weatherapp1\\src\\main\\java\\jhn\\configure\\settings.json");
         
-        Weather weather = new Weather(getLat(), getLong());
-        //Weather weather = new Weather(-78.45, 106.87);
+        //Weather weather = new Weather(getLat(), getLong());
+        Weather weather = new Weather(45, -75);
 
         backgroundHandler = new BackgroundHandler(weather);
 

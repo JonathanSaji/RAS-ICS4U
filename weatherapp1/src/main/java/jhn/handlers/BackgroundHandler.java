@@ -10,7 +10,7 @@ public class BackgroundHandler {
 
     public BackgroundHandler(Weather weather) {
 
-        int averagetemp = weather.getAverageTempVal(LocalDate.now());
+        int averagetemp = weather.getAverageVal(LocalDate.now(),weather.getTemperatures(),0,24);
         System.out.println("Average Temp: " + averagetemp);
         if(averagetemp >= 10 ){
             backgroundPath = "weatherapp1\\src\\main\\java\\jhn\\resources\\summerBackground.gif";

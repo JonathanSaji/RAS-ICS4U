@@ -12,7 +12,8 @@ import jhn.run.WeatherApp;
 
 public class Weather {
 
-    JSONArray time, temperatures, humidity, dewPoint, apparentTemp, precipitation, rain, showers, snowfall, pressureMsl, surfacePressure,
+    JSONArray time, temperatures, humidity, dewPoint, apparentTemp, precipitation, rain, showers, snowfall, pressureMsl,
+            surfacePressure,
             cloudCover, windSpeed, soilTemp, soilMoisture, isDay, windGusts, windDirection;
     double latitude, longitude;
     JSONObject dataObject;
@@ -26,18 +27,17 @@ public class Weather {
             // "https://api.open-meteo.com/v1/forecast?latitude=&longitude=-75&hourly=temperature_2m&models=best_match&timezone=America%2FNew_York"
 
             URL url = new URL(
-    "https://api.open-meteo.com/v1/forecast?"
-    + "latitude=" + latitude
-    + "&longitude=" + longitude
-    + "&models=gem_regional"
-    + "&hourly=temperature_2m,relative_humidity_2m,dew_point_2m,apparent_temperature,"
-    + "precipitation,rain,showers,snowfall,pressure_msl,surface_pressure,cloud_cover,"
-    + "wind_speed_10m,soil_temperature_0_to_10cm,soil_moisture_0_to_10cm,is_day,"
-    + "wind_gusts_10m,wind_direction_10m"
-    + "&timezone=America%2FNew_York"
-    + "&past_days=61"
-    + "&forecast_days=10"
-);
+                    "https://api.open-meteo.com/v1/forecast?"
+                            + "latitude=" + latitude
+                            + "&longitude=" + longitude
+                            + "&models=gem_regional"
+                            + "&hourly=temperature_2m,relative_humidity_2m,dew_point_2m,apparent_temperature,"
+                            + "precipitation,rain,showers,snowfall,pressure_msl,surface_pressure,cloud_cover,"
+                            + "wind_speed_10m,soil_temperature_0_to_10cm,soil_moisture_0_to_10cm,is_day,"
+                            + "wind_gusts_10m,wind_direction_10m"
+                            + "&timezone=America%2FNew_York"
+                            + "&past_days=61"
+                            + "&forecast_days=10");
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
@@ -103,8 +103,6 @@ public class Weather {
         }
     }
 
-
-
     public String getLongLat() {
         return "<html>Latitude: " + dataObject.get("latitude") + "<br>Longtitude: " + dataObject.get("longitude")
                 + "</html>";
@@ -114,22 +112,22 @@ public class Weather {
         return String.valueOf(time.get(slot));
     }
 
-
     /*
-    Temprature
-    */
+     * Temprature
+     */
     // NEW METHOD: Get temperature for a specific date and hour
 
-    public int getAverageTempVal(LocalDate date) {
+    public int getAverageVal(LocalDate date, JSONArray object,int start,int stop) {
         int sum = 0;
         int count = 0;
-        for (int i = 0; i < 24; i++) { // include hour 0..23
-            String val = getValue(temperatures, date, i);
-            if (val == null || val.equals("N/A")) continue;
+        for (int i = start; i < stop; i++) { // include hour 0..23
+            String val = getValue(object, date, i);
+            if (val == null || val.equals("N/A"))
+                continue;
             try {
                 // getValue already returns rounded integers or numeric strings; preserve sign
-                int temp = Integer.parseInt(val);
-                sum += temp;
+                int numberVal = Integer.parseInt(val);
+                sum += numberVal;
                 count++;
             } catch (NumberFormatException e) {
                 try {
@@ -144,14 +142,63 @@ public class Weather {
         return count == 0 ? 0 : sum / count;
     }
 
+    public int getLOWVal(LocalDate date, JSONArray object,int start, int stop) {
+        int lowest = 0;
+        for (int i = start; i < stop; i++) {
+            String val = getValue(object, date, i);
+            if (val == null || val.equals("N/A"))
+                continue;
+            try {
+                int numberVal = Integer.parseInt(val);
+                if (lowest > numberVal) {
+                    lowest = numberVal;
+                }
+            } catch (NumberFormatException e) {
+                try {
+                    double d = Double.parseDouble(val);
+                    if (lowest > d) {
+                        lowest = (int) Math.round(d);
+                    }
+                } catch (NumberFormatException ignored) {
+                    // skip unparsable values
+                }
+            }
+        }
+        return lowest;
+    }
+
+    public int getHIGHVal(LocalDate date, JSONArray object,int start, int stop) {
+        int highest = 0;
+        for (int i = start; i < stop; i++) {
+            String val = getValue(object, date, i);
+            if (val == null || val.equals("N/A"))
+                continue;
+            try {
+                int numberVal = Integer.parseInt(val);
+                if (highest < numberVal) {
+                    highest = numberVal;
+                }
+            } catch (NumberFormatException e) {
+                try {
+                    double d = Double.parseDouble(val);
+                    if (highest < d) {
+                        highest = (int) Math.round(d);
+                    }
+                } catch (NumberFormatException ignored) {
+                    // skip unparsable values
+                }
+            }
+        }
+        return highest;
+    }
+
     public String getTemperature(LocalDate date, int hour, boolean celcius) {
         String degree = WeatherApp.json.getBoolean("celcius") ? "°C" : "°F";
 
-        if(WeatherApp.json.getBoolean("celcius")){
+        if (WeatherApp.json.getBoolean("celcius")) {
             return getValue(temperatures, date, hour) + degree;
-        }
-        else{
-            return (int)(Double.parseDouble(getValue(temperatures, date, hour)) * 1.8 + 32) + degree;
+        } else {
+            return (int) (Double.parseDouble(getValue(temperatures, date, hour)) * 1.8 + 32) + degree;
         }
 
     }
@@ -167,11 +214,9 @@ public class Weather {
         return false;
     }
 
-
-
     /*
-    Humidity
-    */
+     * Gets Stats
+     */
 
     public String getHumidity(LocalDate date, int hour) {
         return "Humidity: " + getValue(humidity, date, hour) + "%";
@@ -185,11 +230,11 @@ public class Weather {
     public String getApparentTemp(LocalDate date, int hour, boolean celcius) {
         String degree = WeatherApp.json.getBoolean("celcius") ? "°C" : "°F";
 
-        if(WeatherApp.json.getBoolean("celcius")){
+        if (WeatherApp.json.getBoolean("celcius")) {
             return "Apparent Temperature: " + getValue(apparentTemp, date, hour) + degree;
-        }
-        else{
-            return "Apparent Temperature: " + (int)(Double.parseDouble(getValue(apparentTemp, date, hour)) * 1.8 + 32) + degree;
+        } else {
+            return "Apparent Temperature: " + (int) (Double.parseDouble(getValue(apparentTemp, date, hour)) * 1.8 + 32)
+                    + degree;
         }
 
     }
@@ -221,6 +266,7 @@ public class Weather {
     public String getCloudCover(LocalDate date, int hour) {
         return "Cloud Cover: " + getValue(cloudCover, date, hour) + " %";
     }
+
     public String getWindSpeed(LocalDate date, int hour) {
         return "Wind Speed: " + getValue(windSpeed, date, hour) + " km/h";
     }
@@ -233,12 +279,15 @@ public class Weather {
     public String geSoilMoisture(LocalDate date, int hour) {
         return "Soil Moisture: " + getValue(soilMoisture, date, hour) + " m³/m³";
     }
+
     public String getIsDay(LocalDate date, int hour) {
         return "Is Day: " + (getValue(isDay, date, hour).equals("1") ? "Yes" : "No");
     }
+
     public String getWindGusts(LocalDate date, int hour) {
         return "Wind Gusts: " + getValue(windGusts, date, hour) + " km/h";
     }
+
     public String getWindDirection(LocalDate date, int hour) {
         return "Wind Direction: " + getValue(windDirection, date, hour) + " °";
     }
@@ -254,20 +303,93 @@ public class Weather {
 
                     int value = (int) Math.round((Double) valueObj);
                     return String.valueOf(value);
-                }
-                else if(valueObj instanceof Long){
+                } else if (valueObj instanceof Long) {
                     return String.valueOf(valueObj);
-                }
-                else if(valueObj instanceof String){
+                } else if (valueObj instanceof String) {
                     return (String) valueObj;
-                }
-                else if(valueObj == null){
+                } else if (valueObj == null) {
                     return "N/A";
                 }
             }
         }
 
         return null; // Not found
+    }
+
+    /*
+     * Getter for each JSON ARRAY
+     */
+
+    public JSONArray getTemperatures() {
+        return temperatures;
+    }
+
+    public JSONArray getTime() {
+        return time;
+    }
+
+    public JSONArray getHumidity() {
+        return humidity;
+    }
+
+    public JSONArray getDewPoint() {
+        return dewPoint;
+    }
+
+    public JSONArray getApparentTemp() {
+        return apparentTemp;
+    }
+
+    public JSONArray getPrecipitation() {
+        return precipitation;
+    }
+
+    public JSONArray getRain() {
+        return rain;
+    }
+
+    public JSONArray getShowers() {
+        return showers;
+    }
+
+    public JSONArray getSnowfall() {
+        return snowfall;
+    }
+
+    public JSONArray getPressureMsl() {
+        return pressureMsl;
+    }
+
+    public JSONArray getSurfacePressure() {
+        return surfacePressure;
+    }
+
+    public JSONArray getCloudCover() {
+        return cloudCover;
+    }
+
+    public JSONArray getWindSpeed() {
+        return windSpeed;
+    }
+
+    public JSONArray getSoilTemp() {
+        return soilTemp;
+    }
+
+    public JSONArray getSoilMoisture() {
+        return soilMoisture;
+    }
+
+    public JSONArray getIsDay() {
+        return isDay;
+    }
+
+    public JSONArray getWindGusts() {
+        return windGusts;
+    }
+
+    public JSONArray getWindDirection() {
+        return windDirection;
     }
 
 }
