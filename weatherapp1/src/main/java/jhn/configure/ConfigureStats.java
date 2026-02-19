@@ -165,25 +165,25 @@ public class ConfigureStats extends JPanel implements MouseListener {
                 break;
             case "- LAT":
                 WeatherApp.setLat(WeatherApp.getLat() - 5);
-                latLabel.setText("Lat: " + Math.round(WeatherApp.getLat()));
+                latLabel.setText("Lat: " + (int)(WeatherApp.getLat()));
                 break;
             case "+ LAT":
                 WeatherApp.setLat(WeatherApp.getLat() + 5);
-                latLabel.setText("Lat: " + Math.round(WeatherApp.getLat()));
+                latLabel.setText("Lat: " + (int)(WeatherApp.getLat()));
                 break;
             case "- LONG":
                 WeatherApp.setLong(WeatherApp.getLong() - 5);
-                longLabel.setText("Long: " + Math.round(WeatherApp.getLong()));
+                longLabel.setText("Long: " +(int)(WeatherApp.getLong()));
                 break;
             case "+ LONG":
                 WeatherApp.setLong(WeatherApp.getLong() + 5);
-                longLabel.setText("Long: " + Math.round(WeatherApp.getLong()));
+                longLabel.setText("Long: " + (int)(WeatherApp.getLong()));
                 break;
             case "Current":
                 WeatherApp.setLat(WeatherApp.getCurrentLat());
                 WeatherApp.setLong(WeatherApp.getCurrentLong());
-                latLabel.setText("Lat: " + Math.round(WeatherApp.getLat()));
-                longLabel.setText("Long: " + Math.round(WeatherApp.getLong()));
+                latLabel.setText("Lat: " + (int)(WeatherApp.getLat()));
+                longLabel.setText("Long: " +(int)(WeatherApp.getLong()));
                 break;
             default:
                 break;

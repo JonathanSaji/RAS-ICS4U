@@ -1,1 +1,1 @@
-{"rain":true,"apparentTemp":true,"latitude":45.2496,"cloudCover":true,"celcius":true,"dewPoint":true,"precipitation":false,"showers":false,"soilTemp":true,"music":false,"surfacePressure":false,"humidity":false,"windSpeed":false,"PressureMSL":true,"longitude":-75.9181}
+{"rain":true,"apparentTemp":true,"latitude":45.2496,"cloudCover":true,"celcius":false,"dewPoint":true,"precipitation":true,"showers":true,"soilTemp":true,"music":false,"surfacePressure":true,"humidity":true,"windSpeed":true,"PressureMSL":true,"longitude":-75.9181}

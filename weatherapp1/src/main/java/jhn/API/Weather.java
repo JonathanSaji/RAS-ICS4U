@@ -257,10 +257,10 @@ public class Weather {
 
 
         if(degree.equals("°C") ){
-             return "Dew Point: " + getValue(dewPoint, date, hour) + degree;
+             return "Dew: " + getValue(dewPoint, date, hour) + degree;
         }
         else{
-            return "Dew Point: " + (Integer.parseInt(getValue(dewPoint, date, hour)) * 1.8 + 32) + degree;
+            return "Dew: " + (int)(Integer.parseInt(getValue(dewPoint, date, hour)) * 1.8 + 32) + degree;
         }
     }
 
