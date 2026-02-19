@@ -149,6 +149,8 @@ public class ConfigureStats extends JPanel implements MouseListener {
         switch (text) {
             case "Go Back":
                 if (WeatherApp.getLat() != latBefore || WeatherApp.getLong() != longBefore) {
+                    latBefore = WeatherApp.getLat();
+                    longBefore = WeatherApp.getLat();
                     Weather weather = new Weather(WeatherApp.getLat(), WeatherApp.getLong());
                     WeatherApp.setBackgroundHandler(new BackgroundHandler(weather));
                     Menu menu = new Menu(weather);
@@ -160,27 +162,28 @@ public class ConfigureStats extends JPanel implements MouseListener {
                     new settings(parentFrame);
                     System.out.println("Going back to settings");
                 }
+                break;
             case "- LAT":
                 WeatherApp.setLat(WeatherApp.getLat() - 5);
-                latLabel.setText("Lat: " + (int)WeatherApp.getLat());
+                latLabel.setText("Lat: " + Math.round(WeatherApp.getLat()));
                 break;
             case "+ LAT":
                 WeatherApp.setLat(WeatherApp.getLat() + 5);
-                latLabel.setText("Lat: " + (int)WeatherApp.getLat());
+                latLabel.setText("Lat: " + Math.round(WeatherApp.getLat()));
                 break;
             case "- LONG":
                 WeatherApp.setLong(WeatherApp.getLong() - 5);
-                longLabel.setText("Long: " + (int)WeatherApp.getLong());
+                longLabel.setText("Long: " + Math.round(WeatherApp.getLong()));
                 break;
             case "+ LONG":
                 WeatherApp.setLong(WeatherApp.getLong() + 5);
-                longLabel.setText("Long: " + (int)WeatherApp.getLong());
+                longLabel.setText("Long: " + Math.round(WeatherApp.getLong()));
                 break;
             case "Current":
                 WeatherApp.setLat(WeatherApp.getCurrentLat());
                 WeatherApp.setLong(WeatherApp.getCurrentLong());
-                latLabel.setText("Lat: " + (int)WeatherApp.getLat());
-                longLabel.setText("Long: " + (int)WeatherApp.getLong());
+                latLabel.setText("Lat: " + Math.round(WeatherApp.getLat()));
+                longLabel.setText("Long: " + Math.round(WeatherApp.getLong()));
                 break;
             default:
                 break;

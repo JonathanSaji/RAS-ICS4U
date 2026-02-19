@@ -67,11 +67,12 @@ public class JsonHandler {
 
     public double getDouble(String key) {
         Object value = data.get(key);
-        if (value instanceof Double) {
-            return (Double) value;
+
+        // Fix: Check if it is ANY number (Long, Integer, Double) and convert
+        if (value instanceof Number) {
+            return ((Number) value).doubleValue();
         }
         return 0.0;
-
     }
 
     // Set value

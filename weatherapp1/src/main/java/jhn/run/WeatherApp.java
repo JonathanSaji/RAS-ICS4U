@@ -18,11 +18,15 @@ public class WeatherApp {
 
         song = new SongHandler("weatherapp1\\src\\main\\java\\jhn\\resources\\KCDII.wav");
 
-    
+        // 1. Initialize JSON Handler first
         json = new JsonHandler("weatherapp1\\src\\main\\java\\jhn\\configure\\settings.json");
-        
-        //Weather weather = new Weather(getLat(), getLong());
-        Weather weather = new Weather(45, -75);
+
+        // 2. GET the values from the file (This is what reads your saved settings)
+        double savedLat = getLat(); // Uses json.getDouble("latitude")
+        double savedLong = getLong(); // Uses json.getDouble("longitude")
+
+        // 3. Use those variables instead of hardcoded numbers like 40, 45, or -75
+        Weather weather = new Weather(savedLat, savedLong);
 
         backgroundHandler = new BackgroundHandler(weather);
 
@@ -59,20 +63,25 @@ public class WeatherApp {
     }
 
     public static void setLat(double lat) {
-        if(lat > 90) lat = 90;
-        if(lat < -90) lat = -90;
+        if (lat > 90)
+            lat = 90;
+        if (lat < -90)
+            lat = -90;
         json.setValue("latitude", lat);
     }
 
     public static void setLong(double lon) {
-        if(lon > 180) lon = 180;
-        if(lon < -180) lon = -180;
+        if (lon > 180)
+            lon = 180;
+        if (lon < -180)
+            lon = -180;
         json.setValue("longitude", lon);
     }
 
     public static double getCurrentLong() {
         return currentLocation.getLong();
     }
+
     public static double getCurrentLat() {
         return currentLocation.getLat();
     }
@@ -100,6 +109,5 @@ public class WeatherApp {
     public static SongHandler getMusicHandler() {
         return song;
     }
-
 
 }

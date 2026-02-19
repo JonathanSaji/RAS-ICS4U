@@ -254,7 +254,14 @@ public class Weather {
 
     public String getDewPoint(LocalDate date, int hour, boolean celcius) {
         String degree = WeatherApp.json.getBoolean("celcius") ? "°C" : "°F";
-        return "Dew Point: " + getValue(dewPoint, date, hour) + degree;
+
+
+        if(degree.equals("°C") ){
+             return "Dew Point: " + getValue(dewPoint, date, hour) + degree;
+        }
+        else{
+            return "Dew Point: " + (Integer.parseInt(getValue(dewPoint, date, hour)) * 1.8 + 32) + degree;
+        }
     }
 
     public String getApparentTemp(LocalDate date, int hour, boolean celcius) {
@@ -303,7 +310,13 @@ public class Weather {
 
     public String getSoilTemp(LocalDate date, int hour, boolean celcius) {
         String degree = WeatherApp.json.getBoolean("celcius") ? "°C" : "°F";
-        return "Soil Temp: " + getValue(soilTemp, date, hour) + degree;
+
+        if(degree.equals("°C") ){
+             return "Soil Temp: " + getValue(soilTemp, date, hour) + degree;
+        }
+        else{
+            return "Soil Temp: " + (Integer.parseInt(getValue(soilTemp, date, hour)) * 1.8 + 32) + degree;
+        }
     }
 
     public String getSoilMoisture(LocalDate date, int hour) {
