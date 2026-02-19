@@ -286,11 +286,11 @@ public class Weather {
     }
 
     public String getPressureMsl(LocalDate date, int hour) {
-        return "Pressure MSL: " + getValue(pressureMsl, date, hour) + " hPa";
+        return "Press: " + getValue(pressureMsl, date, hour) + " hPa";
     }
 
     public String getSurfacePressure(LocalDate date, int hour) {
-        return "Surface Pressure: " + getValue(surfacePressure, date, hour) + " hPa";
+        return "SPress: " + getValue(surfacePressure, date, hour) + " hPa";
     }
 
     public String getCloudCover(LocalDate date, int hour) {
@@ -303,11 +303,11 @@ public class Weather {
 
     public String getSoilTemp(LocalDate date, int hour, boolean celcius) {
         String degree = WeatherApp.json.getBoolean("celcius") ? "°C" : "°F";
-        return "Soil Temperature: " + getValue(soilTemp, date, hour) + degree;
+        return "Soil Temp: " + getValue(soilTemp, date, hour) + degree;
     }
 
-    public String geSoilMoisture(LocalDate date, int hour) {
-        return "Soil Moisture: " + getValue(soilMoisture, date, hour) + " m³/m³";
+    public String getSoilMoisture(LocalDate date, int hour) {
+        return "Moisture: " + getValue(soilMoisture, date, hour) + " m³/m³";
     }
 
     public String getIsDay(LocalDate date, int hour) {

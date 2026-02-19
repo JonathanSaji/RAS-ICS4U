@@ -59,10 +59,9 @@ public class ConfigureStats extends JPanel implements MouseListener {
                 "cloudCover",
                 "windSpeed",
                 "soilTemp",
-                "soilMoisture"
         };
 
-        for (int i = 0; i <= 11; i++) {
+        for (int i = 0; i <= 10; i++) {
             showStats[i] = WeatherApp.json.getBoolean(statNames[i]);
             System.out.println(statNames[i] + ": " + showStats[i]);
         }
@@ -90,7 +89,7 @@ public class ConfigureStats extends JPanel implements MouseListener {
 
         };
 
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < 11; i++) {
             int baseRow = (i / 3) + 1; // 3 stats per row group
             int col = i % 3;
 

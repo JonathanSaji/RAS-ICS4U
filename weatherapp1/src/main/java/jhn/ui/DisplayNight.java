@@ -17,18 +17,18 @@ import jhn.API.Weather;
 import jhn.handlers.JsonHandler;
 import jhn.run.WeatherApp;
 
-public class DisplayNight implements MouseListener{
+public class DisplayNight implements MouseListener {
+
     Weather weather;
     JPanel background;
-    JLabel[] panels = new JLabel[12]; // Array to store 12 hour panels
+    JLabel[] panels = new JLabel[6]; // Fix 1: was 12, only 6 panels needed for 18:00–24:00
     JsonHandler json = WeatherApp.json;
     JPanel timeDividerPanel;
-    int count = 0; // Start at 0 not -1
+    int count = 0;
 
-    public DisplayNight(JFrame parentFrame, Weather weather, LocalDate date,JPanel timeDividerPanel) {
+    public DisplayNight(JFrame parentFrame, Weather weather, LocalDate date, JPanel timeDividerPanel) {
         this.weather = weather;
         this.timeDividerPanel = timeDividerPanel;
-
 
         background = new JPanel(new GridBagLayout()) {
             private final ImageIcon icon = new ImageIcon(
@@ -45,14 +45,12 @@ public class DisplayNight implements MouseListener{
         background.addMouseListener(this);
         parentFrame.add(background, BorderLayout.CENTER);
 
-        // Create 12 hour panels (2 rows of 6)
+        // Create 6 hour panels in a single row
+        for (int j = 0; j < 6; j++) {
+            PanelLabelCreator(new JLabel(), j, 0, true);
+        }
 
-            for (int j = 0; j < 6; j++) {
-                PanelLabelCreator(new JLabel(), j, 0, true);
-            }
-        
-
-        // Add hour + weather labels inside each panel
+        // Add hour + weather labels inside each panel (18:00 – 23:00)
         for (int i = 18; i < 24; i++) {
             int hour12 = i % 12;
             if (hour12 == 0)
@@ -60,34 +58,36 @@ public class DisplayNight implements MouseListener{
             String amPm = i < 12 ? "AM" : "PM";
             String hourLabel = hour12 + " " + amPm;
 
+            // Fix 2: pass all weather values as arguments — was incorrectly placed outside the call
             addHourData(
-                    panels[i - 18],
+                    panels[i - 18], // Fix 3: was i - 12, causing ArrayIndexOutOfBoundsException
                     hourLabel,
-                    weather.getTemperature(date, i, true),
-                    weather.getApparentTemp(date, i, true),
+                    weather.getTemperature(date, i, json.getBoolean("celcius")),
+                    weather.getApparentTemp(date, i, json.getBoolean("celcius")),
                     weather.getWindSpeed(date, i),
                     weather.getHumidity(date, i),
                     weather.getCloudCover(date, i),
                     weather.getPrecipitation(date, i),
                     weather.getRain(date, i),
                     weather.getShowers(date, i),
-                    weather.getDewPoint(date, i, true));
+                    weather.getDewPoint(date, i, json.getBoolean("celcius")),
+                    weather.getPressureMsl(date, i),
+                    weather.getSurfacePressure(date, i),
+                    weather.getSoilTemp(date, i, json.getBoolean("celcius")));
         }
     }
 
     public void PanelLabelCreator(JLabel label, int col, int row, boolean isPanel) {
         GridBagConstraints gbc = new GridBagConstraints();
-            gbc.gridx = col;
-            gbc.gridy = row;
-            gbc.insets = new Insets(50, 10, 10, 50);
-            gbc.fill = GridBagConstraints.BOTH;
-            gbc.weightx = 1.0;
-            gbc.weighty = 1.0;
+        gbc.gridx = col;
+        gbc.gridy = row;
+        gbc.insets = new Insets(50, 10, 10, 50);
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
 
-        
-        
         if (isPanel) {
-            panels[count++] = label; // Store in array using count
+            panels[count++] = label;
             label.setOpaque(true);
             label.setBackground(new Color(176, 196, 222));
             label.setLayout(new GridBagLayout());
@@ -95,29 +95,31 @@ public class DisplayNight implements MouseListener{
         background.add(label, gbc);
     }
 
-    // Adds hour, temp and condition labels inside a panel
+    // Fix 4: added missing pressure, surfacePressure, soilTemp, soilMoisture parameters
     public void addHourData(JLabel panel, String hour, String temp, String apparentTemp,
             String windSpeed, String humidity, String cloudCover,
-            String precipitation, String rain, String showers, String dewPoint) {
+            String precipitation, String rain, String showers, String dewPoint,
+            String pressure, String surfacePressure, String soilTemp) {
 
         panel.removeAll();
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.fill = GridBagConstraints.BOTH;
         gbc.weightx = 1.0;
-        gbc.insets = new Insets(3, 5, 3, 5);
+        gbc.insets = new Insets(3, 2, 2, 3);
         int row = 0;
 
         // Always shown
         addLabel(panel, createDataLabel(hour), gbc, row++);
 
         LocalDateTime date = LocalDateTime.now();
-        Time time =  new Time(hour,date);
+        Time time = new Time(hour, date);
         boolean timeMatch = time.getMatchTime();
         System.out.println(timeMatch);
-        if(timeMatch){
-            panel.setBorder(BorderFactory.createLineBorder(Color.BLACK,5));
+        if (timeMatch) {
+            panel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
         }
+
         addLabel(panel, createDataLabel(temp), gbc, row++);
 
         // Toggleable
@@ -137,6 +139,12 @@ public class DisplayNight implements MouseListener{
             addLabel(panel, createDataLabel(showers), gbc, row++);
         if (WeatherApp.json.getBoolean("dewPoint"))
             addLabel(panel, createDataLabel(dewPoint), gbc, row++);
+        if (WeatherApp.json.getBoolean("PressureMSL"))
+            addLabel(panel, createDataLabel(pressure), gbc, row++);
+        if (WeatherApp.json.getBoolean("surfacePressure"))
+            addLabel(panel, createDataLabel(surfacePressure), gbc, row++);
+        if (WeatherApp.json.getBoolean("soilTemp"))
+            addLabel(panel, createDataLabel(soilTemp), gbc, row++);
 
         panel.revalidate();
         panel.repaint();
@@ -144,7 +152,7 @@ public class DisplayNight implements MouseListener{
 
     private void addLabel(JLabel panel, JLabel label, GridBagConstraints gbc, int row) {
         gbc.gridy = row;
-        label.setFont(new Font("Monospaced",Font.BOLD,25));
+        label.setFont(new Font("Monospaced", Font.BOLD, 25));
         panel.add(label, gbc);
     }
 
@@ -156,44 +164,23 @@ public class DisplayNight implements MouseListener{
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if(e.getComponent() instanceof JPanel){
-            JPanel panel = (JPanel)e.getComponent();
-            panel.setVisible(false);
+        // Fix 6: was instanceof JPanel which never matched hour panels (they are JLabels)
+        // Now correctly checks for the background panel specifically
+        if (e.getComponent() == background) {
+            background.setVisible(false);
             timeDividerPanel.setVisible(true);
-        
-            
         }
-
     }
 
     @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
+    public void mouseEntered(MouseEvent e) {}
 
     @Override
-    public void mouseExited(MouseEvent e) {
-
-    }
+    public void mouseExited(MouseEvent e) {}
 
     @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
+    public void mousePressed(MouseEvent e) {}
 
     @Override
-    public void mouseReleased(MouseEvent e) {
-    }
-
-    // public static void main(String[] args) {
-    //     SwingUtilities.invokeLater(() -> {
-    //         JFrame frame = new JFrame("Weather App");
-
-    //         new DisplayAfternoon(frame, new Weather(45, -75), LocalDate.now());
-
-    //         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-    //         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    //         frame.setVisible(true);
-    //     });
-    // }
+    public void mouseReleased(MouseEvent e) {}
 }
