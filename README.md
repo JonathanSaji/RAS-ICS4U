@@ -35,7 +35,7 @@ Configure which weather metrics to display:
 ## Technologies Used
 
 - **Language**: Java
-- **GUI Framework**: Swing
+- **GUI Framework**: JavaFX 21
 - **API**: [Open-Meteo Weather API](https://open-meteo.com/)
 - **Geolocation**: IP-API for automatic location detection
 - **Data Format**: JSON (using org.json.simple)
@@ -45,7 +45,7 @@ Configure which weather metrics to display:
 ```
 weatherapp1/
 ├── src/main/java/jhn/
-│   ├── WeatherApp.java           # Main application entry point
+│   ├── WeatherApp.java           # JavaFX application entry point
 │   ├── Menu.java                 # Main menu interface
 │   ├── Weather.java              # Weather data handler & API calls
 │   ├── DisplayWeather.java       # Hourly weather display panel
@@ -72,8 +72,8 @@ weatherapp1/
 ## Installation
 
 ### Prerequisites
-- Java Development Kit (JDK) 8 or higher
-- Maven (optional, for dependency management)
+- Java Development Kit (JDK) 21 or higher
+- Maven
 - Internet connection for API calls
 
 ### Dependencies
@@ -98,16 +98,11 @@ Add to your `pom.xml`:
    weatherapp1/src/main/java/jhn/settings.json
    ```
 
-3. Compile and run:
+3. Compile and run with Maven:
    ```bash
-   javac -cp ".:json-simple-1.1.1.jar" weatherapp1/src/main/java/jhn/*.java
-   java -cp ".:json-simple-1.1.1.jar" jhn.WeatherApp
-   ```
-
-   Or with Maven:
-   ```bash
+   cd weatherapp1
    mvn clean compile
-   mvn exec:java -Dexec.mainClass="jhn.WeatherApp"
+   mvn javafx:run
    ```
 
 ## Configuration
